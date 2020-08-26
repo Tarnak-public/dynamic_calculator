@@ -1,0 +1,160 @@
+CLONE YOUR REPO
+bfg use  --no-blob-protection for head too
+
+PS F:\AndroidStudioProjects\dyn_c> git filter-branch --force --index-filter "git rm --cached --ignore-unmatch app/google-services.json" --prune-empty --tag-name-filter cat -- --all
+WARNING: git-filter-branch has a glut of gotchas generating mangled history
+         rewrites.  Hit Ctrl-C before proceeding to abort, then use an
+         alternative filtering tool such as 'git filter-repo'
+         (https://github.com/newren/git-filter-repo/) instead.  See the
+         filter-branch manual page for more details; to squelch this warning,
+         set FILTER_BRANCH_SQUELCH_WARNING=1.
+Proceeding with filter-branch...
+
+Rewrite d3906d2d0c31e696c8ba7eafc544d32aaa148fe6 (3/6) (2 seconds passed, remaining 2 predicted)    rm 'app/google-services.json'
+Rewrite a185dc26c8f522241b081a3ffe1a2d4662e80803 (5/6) (4 seconds passed, remaining 0 predicted)    rm 'app/google-services.json'
+Rewrite 9311ed902281f27a646c554c1117f1bf2ce18550 (5/6) (4 seconds passed, remaining 0 predicted)
+Ref 'refs/heads/generate_apk' was rewritten
+Ref 'refs/remotes/origin/generate_apk' was rewritten
+WARNING: Ref 'refs/remotes/origin/development' is unchanged
+WARNING: Ref 'refs/remotes/origin/generate_apk' is unchanged
+
+
+PS F:\AndroidStudioProjects\dyn_c> java -jar E:\Downloads\bfg-1.13.0.jar -D google-services.json ./        
+Using repo : F:\AndroidStudioProjects\dyn_c\.\.git
+
+Found 32 objects to protect
+Found 7 commit-pointing refs : HEAD, refs/heads/generate_apk, refs/original/refs/heads/generate_apk, ...
+
+Protected commits
+-----------------
+
+These are your protected commits, and so their contents will NOT be altered:
+
+ * commit fed8b2a5 (protected by 'HEAD')
+
+Cleaning
+--------
+
+Found 8 commits
+Cleaning commits:       100% (8/8)
+Cleaning commits completed in 1 296 ms.
+
+Updating 2 Refs
+---------------
+
+        Ref                                              Before     After
+        --------------------------------------------------------------------
+        refs/original/refs/heads/generate_apk          | 9311ed90 | c76736c7
+        refs/original/refs/remotes/origin/generate_apk | 9311ed90 | c76736c7
+
+Updating references:    100% (2/2)
+...Ref update completed in 33 ms.
+
+Commit Tree-Dirt History
+------------------------
+
+        Earliest      Latest
+        |                  |
+         . .  . D  . D  . m
+
+        D = dirty commits (file tree fixed)
+        m = modified commits (commit message or parents changed)
+        . = clean commits (no changes to file tree)
+
+                                Before     After
+        -------------------------------------------
+        First modified commit | d3906d2d | 46945a68
+        Last dirty commit     | a185dc26 | fed8b2a5
+
+Deleted files
+-------------
+
+        Filename               Git id
+        ----------------------------------------
+        google-services.json | 0897058c (1,1 KB)
+
+
+In total, 7 object ids were changed. Full details are logged here:
+
+        F:\AndroidStudioProjects\dyn_c\..bfg-report\2020-08-26\20-54-52
+
+BFG run is complete! When ready, run: git reflog expire --expire=now --all && git gc --prune=now --aggressive
+
+
+--
+You can rewrite history in Git - don't let Trump do it for real!
+Trump's administration has lied consistently, to make people give up on ever
+being told the truth. Don't give up: https://www.theguardian.com/us-news/trump-administration
+--
+
+
+PS F:\AndroidStudioProjects\dyn_c> git reflog expire --expire=now --all && git gc --prune=now --aggressive
+At line:1 char:38
++ git reflog expire --expire=now --all && git gc --prune=now --aggressi ...
++                                      ~~
+The token '&&' is not a valid statement separator in this version.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : InvalidEndOfLine
+
+PS F:\AndroidStudioProjects\dyn_c> git reflog expire --expire=now --all
+PS F:\AndroidStudioProjects\dyn_c> git gc --prune=now --aggressive
+Enumerating objects: 139, done.
+Counting objects: 100% (139/139), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (102/102), done.
+Writing objects: 100% (139/139), done.
+Total 139 (delta 21), reused 107 (delta 0), pack-reused 0
+PS F:\AndroidStudioProjects\dyn_c> git push
+To https://github.com/Tarnak-public/dyn_c
+ ! [rejected]        generate_apk -> generate_apk (fetch first)
+error: failed to push some refs to 'https://github.com/Tarnak-public/dyn_c'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+PS F:\AndroidStudioProjects\dyn_c> java -jar E:\Downloads\bfg-1.13.0.jar -D google-services.json ./ --no-blob-protection
+
+Using repo : F:\AndroidStudioProjects\dyn_c\.\.git
+
+Found 0 objects to protect
+Found 7 commit-pointing refs : HEAD, refs/heads/generate_apk, refs/original/refs/heads/generate_apk, ...
+
+Protected commits
+-----------------
+
+You're not protecting any commits, which means the BFG will modify the contents of even *current* commits.
+
+This isn't recommended - ideally, if your current commits are dirty, you should fix up your working copy and commit that, check that your build still works, and only then run the BFG to clean up your history.
+
+Cleaning
+--------
+
+Found 6 commits
+Cleaning commits:       100% (6/6)
+Cleaning commits completed in 107 ms.
+
+BFG aborting: No refs to update - no dirty commits found??
+
+
+
+--
+You can rewrite history in Git - don't let Trump do it for real!
+Trump's administration has lied consistently, to make people give up on ever
+being told the truth. Don't give up: https://www.theguardian.com/us-news/trump-administration
+--
+
+
+PS F:\AndroidStudioProjects\dyn_c>
+PS F:\AndroidStudioProjects\dyn_c> git push --all -force
+error: did you mean `--force` (with two dashes)?
+PS F:\AndroidStudioProjects\dyn_c> git push --all --force
+Enumerating objects: 32, done.
+Counting objects: 100% (32/32), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (12/12), done.
+Writing objects: 100% (18/18), 1.53 KiB | 782.00 KiB/s, done.
+Total 18 (delta 9), reused 11 (delta 2), pack-reused 0
+remote: Resolving deltas: 100% (9/9), completed with 7 local objects.
+To https://github.com/Tarnak-public/dyn_c
+ + 9311ed9...fed8b2a generate_apk -> generate_apk (forced update)
