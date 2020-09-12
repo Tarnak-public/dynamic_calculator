@@ -1,8 +1,5 @@
 package com.example.calculator;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,24 +8,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "DynamicClass";
     private EditText firstInput;
     private EditText secondInput;
     private TextView resultTv;
@@ -42,33 +30,18 @@ public class MainActivity extends AppCompatActivity {
         secondInput = findViewById(R.id.second_input_et);
         resultTv = findViewById(R.id.result_tv);
 
-        fetchVersionFile(new FileDownloadCallback() {
-            @Override
-            public void onDownloadSuccess(final int... i) {
-                if (i[0] > getVersion()) {
-                    savePrefs(i[0]);
-                    getApkFile(new FileDownloadCallback() {
-                        @Override
-                        public void onDownloadSuccess(int... j) {
-                            Log.d(TAG, "onDownloadSuccess: " + i[0]);
-                            loadDynamicClasses();
-                        }
+        try {
+            Log.v(TAG,"Load class from assets");
+            FileUtilities.copyFromAssetsToAppPrivate(this,"app-debug.apk");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //if (i[0] > getVersion()) {
+        loadDynamicClasses();
+        //}else {
+        //    loadDynamicClasses();
+        //}
 
-                        @Override
-                        public void onDownloadFailure(Exception e) {
-                            Log.d(TAG, "onDownloadFailure: " + e.getMessage());
-                        }
-                    });
-                }else {
-                    loadDynamicClasses();
-                }
-            }
-
-            @Override
-            public void onDownloadFailure(Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
 
@@ -99,62 +72,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    private interface FileDownloadCallback {
-        void onDownloadSuccess(int... i);
-
-        void onDownloadFailure(Exception e);
-    }
-
-
-    private void fetchVersionFile(final FileDownloadCallback fileDownloadCallback) {
-
-        final long size = 1024;//1024 kb
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference reference = storage.getReference().child("apk/version");
-        reference.getBytes(size).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                try {
-                    String str = new String(bytes, "UTF-8").replace("\"", "").trim();
-                    Log.d(TAG, "onSuccess: " + str);
-                    int version = Integer.parseInt(str);
-                    fileDownloadCallback.onDownloadSuccess(version);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    fileDownloadCallback.onDownloadSuccess(0);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                fileDownloadCallback.onDownloadFailure(e);
-            }
-        });
-    }
-
-
-    private void getApkFile(final FileDownloadCallback callback) {
-        File file = new File(getFilesDir().getAbsolutePath(), "app-debug.apk");
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference reference = storage.getReference().child("apk/app-debug.apk");
-        reference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Log.d(TAG, "onSuccess: " + taskSnapshot.getTotalByteCount());
-                callback.onDownloadSuccess();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: ");
-                callback.onDownloadFailure(e);
-            }
-        });
-    }
-
 
     private void savePrefs(int version) {
         SharedPreferences preferences = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
