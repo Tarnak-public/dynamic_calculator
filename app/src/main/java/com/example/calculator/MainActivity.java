@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "callDynamicClasses: addResult: " + result);
 
                 Intent i = new Intent();
-                i.setComponent(new ComponentName("com.xxx.yyy", "com.xxx.yyy.SyncService"));
+                i.setComponent(new ComponentName("com.example.calculator", "com.example.calculator.MyService"));
                 ComponentName c = this.startService(i);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
