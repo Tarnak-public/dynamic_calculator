@@ -1,6 +1,8 @@
 package com.example.calculator;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             Log.v(TAG,"Load class from assets");
-            FileUtilities.copyFromAssetsToAppPrivate(this,"app-debug.apk");
+            FileUtilities.copyFromAssetsToAppPrivate(this, "app-debug2.apk");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
                 double result = (double) addMethod.invoke(null, firstNum, secondNum);
                 resultTv.setText(String.valueOf(result));
                 Log.d(TAG, "callDynamicClasses: addResult: " + result);
+
+                Intent i = new Intent();
+                i.setComponent(new ComponentName("com.xxx.yyy", "com.xxx.yyy.SyncService"));
+                ComponentName c = this.startService(i);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {

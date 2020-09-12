@@ -1,11 +1,6 @@
 package com.example.calculator;
 
 import android.content.Context;
-import android.util.Log;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 
 import dalvik.system.DexClassLoader;
 
@@ -21,7 +16,7 @@ public class LoadDynamicClasses {
     }
 
     public void loadClassesFromApk() {
-        String apkPath = context.getFilesDir().getAbsolutePath() + "/app-debug.apk";
+        String apkPath = context.getFilesDir().getAbsolutePath() + "/app-debug2.apk";
 
         final DexClassLoader classLoader = new DexClassLoader(apkPath, context.getCacheDir().getAbsolutePath(), null, this.getClass().getClassLoader());
         try {
