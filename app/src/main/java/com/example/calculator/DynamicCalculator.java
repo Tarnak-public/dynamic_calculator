@@ -1,5 +1,7 @@
 package com.example.calculator;
 
+import android.content.Intent;
+
 public class DynamicCalculator {
 
     /* how to guide:
@@ -14,4 +16,8 @@ public class DynamicCalculator {
         return d2 - d1;
     }
 
+//    public void startServ() {
+//
+//        startService(new Intent(this, MyService.class));
+//    }
 }
