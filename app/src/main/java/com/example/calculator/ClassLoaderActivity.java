@@ -17,9 +17,9 @@ import dalvik.system.DexClassLoader;
 //
 public class ClassLoaderActivity extends Activity
 {
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         // file.jar has a dex'd "classes.dex" entry that you can generate with "dx" from any number of JARs or class files
+        super.onCreate(savedInstanceState);
         ClassLoader dexLoader = new DexClassLoader("/path/to/file.jar", getCacheDir().getAbsolutePath(), null, getClassLoader());
         setAPKClassLoader(dexLoader);
 
